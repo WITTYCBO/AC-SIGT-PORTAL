@@ -42,35 +42,63 @@ document.addEventListener('DOMContentLoaded', () => {
         state.email = user + '@automaticoscanarios.es';
         loader.classList.remove('hidden');
 
-        // Simulación o llamada real (Deberás configurar CORS en GAS)
-        // Por ahora, como es un cambio estructural, usaremos un mock o avisaremos
-        // Si quieres mantener google.script.run, el HTML debe vivir en GAS.
-        // Si mueves el HTML a GitHub, debes cambiar Code.gs para servir JSON.
+        try {
+            const res = await callGas('checkUser', { email: state.email });
+            loader.classList.add('hidden');
 
-        alert("¡Aviso! Se requiere configurar la API en Code.gs para recibir peticiones externas.");
-        loader.classList.add('hidden');
-
-        // Mock de transición para visualización inmediata en GitHub
-        state.exists = true;
-        state.isFirstTime = true;
-        state.name = user;
-        document.getElementById('pin-label').textContent = 'Crea tu PIN de 6 dígitos';
-        document.getElementById('first-time-msg').classList.remove('hidden');
-        screens.email.classList.add('hidden');
-        screens.pin.classList.remove('hidden');
+            if (res.exists) {
+                state.isFirstTime = !res.hasPin;
+                state.name = res.name || user;
+                document.getElementById('pin-label').textContent = state.isFirstTime ? 'Crea tu PIN de 6 dígitos' : 'Ingresa tu PIN de 6 dígitos';
+                document.getElementById('first-time-msg').classList.toggle('hidden', !state.isFirstTime);
+                screens.email.classList.add('hidden');
+                screens.pin.classList.remove('hidden');
+            } else {
+                alert('Usuario no registrado o dominio incorrecto.');
+            }
+        } catch (error) {
+            loader.classList.add('hidden');
+            alert('Error al conectar con el servidor. Reintenta en unos segundos.');
+        }
     };
 
-    // Entrar
-    document.getElementById('btn-login').onclick = () => {
+    // Entrar / Confirmar PIN
+    document.getElementById('btn-login').onclick = async () => {
         const pin = inputs.pin.value.trim();
         if (pin.length !== 6 || isNaN(pin)) return alert('El PIN debe ser de 6 dígitos numéricos');
 
-        document.getElementById('user-display-name').textContent = state.name;
-        document.getElementById('login-view').classList.remove('active');
-        document.getElementById('dashboard-view').classList.add('active');
+        loader.classList.remove('hidden');
 
-        // Guardar sesión
-        localStorage.setItem('sigt_portal_user', JSON.stringify({ email: state.email, name: state.name }));
+        try {
+            let res;
+            if (state.isFirstTime) {
+                res = await callGas('setPin', { email: state.email, pin: pin, name: state.name });
+            } else {
+                res = await callGas('verifyPin', { email: state.email, pin: pin });
+            }
+
+            loader.classList.add('hidden');
+
+            if (res.success) {
+                document.getElementById('user-display-name').textContent = res.name || state.name;
+                document.getElementById('login-view').classList.remove('active');
+                document.getElementById('dashboard-view').classList.add('active');
+
+                // Guardar sesión
+                localStorage.setItem('sigt_portal_user', JSON.stringify({ email: state.email, name: res.name || state.name }));
+            } else {
+                alert(res.message);
+            }
+        } catch (error) {
+            loader.classList.add('hidden');
+            alert('Error al verificar PIN. Reintenta.');
+        }
+    };
+
+    // Volver
+    document.getElementById('btn-back').onclick = () => {
+        screens.pin.classList.add('hidden');
+        screens.email.classList.remove('hidden');
     };
 
     // Logout
