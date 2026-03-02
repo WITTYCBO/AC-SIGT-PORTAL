@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal SIGT - Grupo AC</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body class="dark-theme">
+  <div id="app">
+    <!-- Vista de Login -->
+    <div id="login-view" class="view active">
+      <div class="glass-card login-card">
+        <div class="logo-container">
+          <div class="logo-icon">🚀</div>
+          <h1>Portal SIGT</h1>
+          <p class="subtitle">Grupo AC - Plataforma de Despegue</p>
+        </div>
+
+        <div id="email-step">
+          <div class="input-group">
+            <label for="email-user">Correo Corporativo</label>
+            <div class="input-wrapper">
+              <input type="text" id="email-user" placeholder="nombre">
+              <span class="domain">@automaticoscanarios.es</span>
+            </div>
+          </div>
+          <button id="btn-next" class="btn-primary">Siguiente</button>
+        </div>
+
+        <div id="pin-step" class="hidden">
+          <div class="input-group">
+            <label id="pin-label">PIN de Acceso (6 dígitos)</label>
+            <input type="password" id="pin-input" maxlength="6" inputmode="numeric" placeholder="••••••">
+          </div>
+          <p id="first-time-msg" class="info-text hidden">🎉 Es tu primera vez. Establece un PIN que usarás siempre.</p>
+          <button id="btn-login" class="btn-primary">Entrar</button>
+          <button id="btn-back" class="btn-secondary">Volver</button>
+        </div>
+
+        <div id="login-error" class="error-msg hidden"></div>
+      </div>
+    </div>
+
+    <!-- Vista de Dashboard -->
+    <div id="dashboard-view" class="view">
+      <header class="main-header">
+        <div class="header-content">
+          <div class="user-info">
+            <span class="welcome">Bienvenido, <strong id="user-display-name">Usuario</strong></span>
+          </div>
+          <div class="header-actions">
+            <button id="btn-logout" class="btn-secondary" title="Cerrar Sesión">Logout 🚪</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <div class="section-title">
+          <h2>Tus Aplicaciones</h2>
+          <p>Selecciona una plataforma para comenzar</p>
+        </div>
+
+        <div class="app-grid">
+          <!-- App 1: Incidencias -->
+          <div class="app-card">
+            <div class="app-icon">🛠️</div>
+            <div class="app-info">
+              <h3>Asistente Incidencias</h3>
+              <p>Gestión centralizada de averías y reparaciones.</p>
+              <button class="btn-details">Ver descripción ▾</button>
+              <div class="details hidden">
+                <p>Reporte y seguimiento de incidencias en tiempo real con geolocalización.</p>
+              </div>
+            </div>
+            <a href="https://wittycbo.github.io/Asistente-Incidencias-Grupo-AC/" target="_blank"
+              class="btn-open">Abrir</a>
+          </div>
+
+          <!-- App 2: Consultas -->
+          <div class="app-card">
+            <div class="app-icon">🔍</div>
+            <div class="app-info">
+              <h3>TechConsultas</h3>
+              <p>Base de conocimientos técnica avanzada.</p>
+              <button class="btn-details">Ver descripción ▾</button>
+              <div class="details hidden">
+                <p>Manuales, esquemas técnicos y soluciones rápidas para equipos.</p>
+              </div>
+            </div>
+            <a href="https://wittycbo.github.io/techconsultas/" target="_blank" class="btn-open">Abrir</a>
+          </div>
+
+          <!-- App 3: SIGT Técnicos -->
+          <div class="app-card">
+            <div class="app-icon">📲</div>
+            <div class="app-info">
+              <h3>SIGT-Tecnicos</h3>
+              <p>Panel operativo para el personal de campo.</p>
+              <button class="btn-details">Ver descripción ▾</button>
+              <div class="details hidden">
+                <p>Visualización de rutas, partes de trabajo y herramientas de diagnóstico.</p>
+              </div>
+            </div>
+            <a href="https://wittycbo.github.io/SIGT-Tecnicos/" target="_blank" class="btn-open">Abrir</a>
+          </div>
+
+          <!-- App 4: Almacén -->
+          <div class="app-card">
+            <div class="app-icon">📦</div>
+            <div class="app-info">
+              <h3>GestLog</h3>
+              <p>Control logístico y de almacén.</p>
+              <button class="btn-details">Ver descripción ▾</button>
+              <div class="details hidden">
+                <p>Control de stock, repuestos y pedidos de materiales.</p>
+              </div>
+            </div>
+            <a href="https://wittycbo.github.io/gestlog-ac/" target="_blank" class="btn-open">Abrir</a>
+          </div>
+
+          <!-- App 5: Formación -->
+          <div class="app-card highlight">
+            <div class="app-icon">🎓</div>
+            <div class="app-info">
+              <h3>Aula de Formación</h3>
+              <p>Plataforma de capacitación continua.</p>
+              <button class="btn-details">Ver descripción ▾</button>
+              <div class="details hidden">
+                <p>Cursos interactivos para el equipo técnico del Grupo AC.</p>
+              </div>
+            </div>
+            <a href="https://aistudio.google.com/apps/drive/1LasZs3_rzh8LKIfDOOBGueak7B6rZpS4?showPreview=true&showAssistant=true"
+              target="_blank" class="btn-open">Acceder</a>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Cargador -->
+    <div id="loader" class="loader-overlay hidden">
+      <div class="spinner"></div>
+      <p>Procesando...</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
